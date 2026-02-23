@@ -570,30 +570,269 @@
     to { transform: rotate(360deg); }
   }
 
+  /* ── Mobile flow connectors (hidden on desktop) ─────── */
+  .flow-connector {
+    display: none;
+  }
+
   /* ── Responsive ───────────────────────────────────────── */
   @media (max-width: 960px) {
-    .ri-hero__container {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto auto auto auto auto;
-      gap: 0;
-      max-width: 360px;
+    .ri-hero {
+      padding: 32px 16px 24px;
+      min-height: auto;
     }
-    .col-label--input  { grid-column: 1; grid-row: 1; }
-    .ri-hero__inputs   { grid-column: 1; grid-row: 2; margin-bottom: 32px; }
-    .col-label--os     { grid-column: 1; grid-row: 3; }
-    .ri-hero__center   { grid-column: 1; grid-row: 4; margin-bottom: 48px; }
-    .col-label--output { grid-column: 1; grid-row: 5; }
-    .ri-hero__outputs  { grid-column: 1; grid-row: 6; }
-    .feedback-banner   { grid-column: 1; grid-row: 7; }
+
+    .ri-hero__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      max-width: 420px;
+    }
+
     .ri-hero__svg { display: none; }
+
+    /* Remove entrance animations on mobile */
     .input-card, .kpi-card {
       opacity: 1; transform: none; animation: none;
     }
     .hub__circle { opacity: 1; transform: none; animation: none; }
     .col-label { opacity: 1; animation: none; }
     .kpi-card__value { opacity: 1 !important; animation: none !important; }
-    .feedback-banner { opacity: 1; transform: none; animation: none; }
-    .feedback-banner__pill { flex-wrap: wrap; justify-content: center; text-align: center; }
+    .feedback-banner { opacity: 1; transform: none; animation: none; margin-top: 0; }
+
+    /* Column labels: inline tags */
+    .col-label {
+      padding: 0 0 12px;
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    /* Inputs: full width, compact */
+    .ri-hero__inputs {
+      width: 100%;
+      gap: 8px;
+    }
+
+    .input-card {
+      padding: 12px 14px;
+      gap: 10px;
+    }
+
+    .input-card__icon {
+      width: 34px;
+      height: 34px;
+    }
+
+    .input-card__label { font-size: 13px; }
+    .input-card__sub { font-size: 10px; }
+
+    .input-card:hover {
+      transform: none;
+      border-color: var(--blue-100);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    /* Flow connectors visible on mobile */
+    .flow-connector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0;
+      position: relative;
+    }
+
+    .flow-connector__line {
+      width: 2px;
+      height: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flow-connector__line::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--blue-200), var(--blue-400));
+      border-radius: 1px;
+    }
+
+    .flow-connector__line::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      left: -2px;
+      top: -6px;
+      background: var(--blue-500);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--blue-400);
+      animation: mobileParticleDown 1.5s ease-in-out infinite;
+    }
+
+    .flow-connector--output .flow-connector__line::before {
+      background: linear-gradient(to bottom, var(--emerald-400), var(--emerald-500));
+    }
+
+    .flow-connector--output .flow-connector__line::after {
+      background: var(--emerald-500);
+      box-shadow: 0 0 6px var(--emerald-400);
+    }
+
+    .flow-connector__chevrons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      margin-top: 4px;
+    }
+
+    .flow-connector__chevron {
+      width: 12px;
+      height: 8px;
+      opacity: 0.3;
+      animation: chevronPulse 1.5s ease-in-out infinite;
+    }
+
+    .flow-connector__chevron:nth-child(1) { animation-delay: 0s; }
+    .flow-connector__chevron:nth-child(2) { animation-delay: 0.15s; }
+    .flow-connector__chevron:nth-child(3) { animation-delay: 0.3s; }
+
+    .flow-connector__label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--slate-400);
+      margin-top: 6px;
+    }
+
+    @keyframes mobileParticleDown {
+      0%   { top: -6px; opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { top: 32px; opacity: 0; }
+    }
+
+    @keyframes chevronPulse {
+      0%, 100% { opacity: 0.2; }
+      50%      { opacity: 0.8; }
+    }
+
+    /* Hub: smaller on mobile */
+    .ri-hero__center { margin: 0; }
+
+    .hub { width: 130px; height: 130px; }
+
+    .hub__circle {
+      width: 130px;
+      height: 130px;
+    }
+
+    .hub__logo svg { width: 34px; height: 34px; }
+    .hub__product-name { font-size: 12px; margin-top: 2px; }
+    .hub__product-sub { font-size: 8px; letter-spacing: 2px; }
+
+    .hub__outer-ring:nth-child(1) { inset: -14px; }
+    .hub__outer-ring:nth-child(2) { inset: -30px; }
+    .hub__outer-ring:nth-child(3) { inset: -46px; }
+
+    .hub__status {
+      bottom: -28px;
+      font-size: 10px;
+    }
+
+    /* Outputs: full width */
+    .ri-hero__outputs {
+      width: 100%;
+      gap: 8px;
+    }
+
+    .kpi-card {
+      padding: 12px 14px;
+      gap: 10px;
+      border-radius: 12px;
+    }
+
+    .kpi-card:hover {
+      transform: none;
+      border-color: var(--slate-200);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .kpi-card__value-wrap {
+      width: 46px;
+      height: 46px;
+      border-radius: 10px;
+    }
+
+    .kpi-card__value { font-size: 16px; }
+    .kpi-card__label { font-size: 12px; }
+    .kpi-card__desc { font-size: 10px; }
+    .kpi-card__trend { font-size: 9px; }
+
+    /* Feedback banner: compact */
+    .feedback-banner {
+      width: 100%;
+      padding: 8px 0 0;
+      margin-top: 0;
+    }
+
+    .feedback-banner__pill {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border-radius: 16px;
+      width: 100%;
+    }
+
+    .feedback-banner__text { font-size: 12px; }
+    .feedback-banner__sub { font-size: 10px; }
+    .feedback-banner__cycle { margin-left: 0; }
+
+    /* Mobile feedback loop: visual arc on sides */
+    .flow-connector--feedback {
+      padding: 12px 0 4px;
+    }
+
+    .flow-connector--feedback .flow-connector__line {
+      height: 0;
+    }
+
+    .flow-connector--feedback .flow-connector__chevrons {
+      flex-direction: row;
+      gap: 6px;
+      margin-top: 0;
+    }
+
+    .flow-connector--feedback .flow-connector__chevron {
+      transform: rotate(180deg);
+    }
+
+    .flow-connector--feedback .flow-connector__label {
+      color: var(--amber-500);
+    }
+  }
+
+  /* ── Extra small (iPhone SE etc) ──────────────────────── */
+  @media (max-width: 380px) {
+    .ri-hero { padding: 24px 12px 16px; }
+    .ri-hero__container { max-width: 100%; }
+    .input-card { padding: 10px 12px; }
+    .input-card__icon { width: 30px; height: 30px; }
+    .input-card__label { font-size: 12px; }
+    .kpi-card { padding: 10px 12px; }
+    .kpi-card__value-wrap { width: 40px; height: 40px; }
+    .kpi-card__value { font-size: 14px; }
+    .hub { width: 110px; height: 110px; }
+    .hub__circle { width: 110px; height: 110px; }
+    .hub__logo svg { width: 28px; height: 28px; }
+    .hub__product-name { font-size: 11px; }
   }
 </style>
 </head>
@@ -609,7 +848,7 @@
     <div class="col-label col-label--os">Plattform</div>
     <div class="col-label col-label--output">Dina resultat</div>
 
-    <!-- ═══ LEFT: Brand owner inputs ═══ -->
+    <!-- ═══ LEFT / TOP: Brand owner inputs ═══ -->
     <div class="ri-hero__inputs" id="inputs">
       <div class="input-card" data-input="0">
         <div class="input-card__icon input-card__icon--sortiment">
@@ -672,6 +911,17 @@
       </div>
     </div>
 
+    <!-- Mobile flow: Input → Hub -->
+    <div class="flow-connector flow-connector--input">
+      <div class="flow-connector__line"></div>
+      <div class="flow-connector__chevrons">
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="flow-connector__label">Analyseras</div>
+    </div>
+
     <!-- ═══ CENTER: Growth OS Hub ═══ -->
     <div class="ri-hero__center">
       <div class="hub" id="hub">
@@ -716,7 +966,18 @@
       </div>
     </div>
 
-    <!-- ═══ RIGHT: KPI Outputs ═══ -->
+    <!-- Mobile flow: Hub → Output -->
+    <div class="flow-connector flow-connector--output">
+      <div class="flow-connector__line"></div>
+      <div class="flow-connector__chevrons">
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#10b981" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#10b981" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#10b981" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="flow-connector__label">Levererar insikter</div>
+    </div>
+
+    <!-- ═══ RIGHT / BOTTOM: KPI Outputs ═══ -->
     <div class="ri-hero__outputs" id="outputs">
       <div class="kpi-card kpi-card--rbi" data-output="0">
         <div class="kpi-card__value-wrap">
@@ -777,6 +1038,16 @@
           <div class="kpi-card__trend kpi-card__trend--up">Agera innan de fyller på</div>
         </div>
       </div>
+    </div>
+
+    <!-- Mobile flow: Output → back to Input (feedback) -->
+    <div class="flow-connector flow-connector--feedback">
+      <div class="flow-connector__chevrons">
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="flow-connector__chevron" viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <div class="flow-connector__label">Stärker nästa cykel</div>
     </div>
 
     <!-- ═══ BOTTOM: Feedback loop banner ═══ -->
