@@ -570,8 +570,12 @@
     to { transform: rotate(360deg); }
   }
 
-  /* ── Mobile flow connectors (hidden on desktop) ─────── */
+  /* ── Mobile-only elements (hidden on desktop) ───────── */
   .flow-connector {
+    display: none;
+  }
+
+  .section-label-mobile {
     display: none;
   }
 
@@ -597,15 +601,22 @@
       opacity: 1; transform: none; animation: none;
     }
     .hub__circle { opacity: 1; transform: none; animation: none; }
-    .col-label { opacity: 1; animation: none; }
     .kpi-card__value { opacity: 1 !important; animation: none !important; }
     .feedback-banner { opacity: 1; transform: none; animation: none; margin-top: 0; }
 
-    /* Column labels: inline tags */
-    .col-label {
-      padding: 0 0 12px;
+    /* Hide desktop column headers on mobile */
+    .col-label { display: none; }
+
+    /* Show mobile inline section labels */
+    .section-label-mobile {
+      display: block;
       font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
       letter-spacing: 2px;
+      color: var(--slate-400);
+      text-align: center;
+      padding-bottom: 12px;
     }
 
     /* Inputs: full width, compact */
@@ -848,6 +859,9 @@
     <div class="col-label col-label--os">Plattform</div>
     <div class="col-label col-label--output">Dina resultat</div>
 
+    <!-- Mobile section label -->
+    <div class="section-label-mobile">Dina insatser</div>
+
     <!-- ═══ LEFT / TOP: Brand owner inputs ═══ -->
     <div class="ri-hero__inputs" id="inputs">
       <div class="input-card" data-input="0">
@@ -966,7 +980,7 @@
       </div>
     </div>
 
-    <!-- Mobile flow: Hub → Output -->
+    <!-- Mobile flow: Hub → Output + section label -->
     <div class="flow-connector flow-connector--output">
       <div class="flow-connector__line"></div>
       <div class="flow-connector__chevrons">
@@ -976,6 +990,9 @@
       </div>
       <div class="flow-connector__label">Levererar insikter</div>
     </div>
+
+    <!-- Mobile section label -->
+    <div class="section-label-mobile">Dina resultat</div>
 
     <!-- ═══ RIGHT / BOTTOM: KPI Outputs ═══ -->
     <div class="ri-hero__outputs" id="outputs">
