@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-retail Growth OS — Hero Diagram</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .ri-hero {
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+    --orange-400: #fb923c;
+    --orange-500: #f97316;
+    --emerald-400: #34d399;
+    --emerald-500: #10b981;
+    --violet-400: #a78bfa;
+    --violet-500: #8b5cf6;
+    --rose-400: #fb7185;
+    --rose-500: #f43f5e;
+    --amber-400: #fbbf24;
+    --amber-500: #f59e0b;
+
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
+    background: var(--slate-50);
+    background-image:
+      radial-gradient(circle at 1px 1px, var(--slate-200) 1px, transparent 0);
+    background-size: 32px 32px;
+    min-height: 780px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Layout ───────────────────────────────────────────── */
+  .ri-hero__container {
+    display: grid;
+    grid-template-columns: 260px 1fr 280px;
+    grid-template-rows: auto 1fr auto;
+    gap: 0;
+    max-width: 1200px;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    min-height: 560px;
+  }
+
+  .col-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--slate-400);
+    text-align: center;
+    padding-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards 0.1s;
+  }
+
+  .col-label--input  { grid-column: 1; grid-row: 1; }
+  .col-label--os     { grid-column: 2; grid-row: 1; }
+  .col-label--output { grid-column: 3; grid-row: 1; }
+
+  /* ── SVG — spans full container including feedback area ─ */
+  .ri-hero__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .flow-line {
+    fill: none;
+    stroke: var(--blue-200);
+    stroke-width: 2;
+    opacity: 0.5;
+    transition: stroke 0.3s, opacity 0.3s;
+  }
+
+  .flow-line--active {
+    stroke: var(--blue-400);
+    opacity: 0.9;
+    stroke-width: 2.5;
+  }
+
+  .flow-line--feedback {
+    stroke: url(#feedbackGradient);
+    stroke-width: 2.5;
+    opacity: 0;
+    stroke-dasharray: 8 4;
+    animation: feedbackLineAppear 1s ease forwards 2.2s, feedbackDash 20s linear infinite 2.2s;
+  }
+
+  .flow-particle {
+    fill: var(--blue-500);
+    filter: drop-shadow(0 0 4px var(--blue-400));
+  }
+
+  .flow-particle-glow {
+    fill: var(--blue-400);
+    opacity: 0.3;
+  }
+
+  .flow-particle--out {
+    fill: var(--emerald-500);
+    filter: drop-shadow(0 0 4px var(--emerald-400));
+  }
+
+  .flow-particle-glow--out {
+    fill: var(--emerald-400);
+    opacity: 0.3;
+  }
+
+  .flow-particle--feedback {
+    fill: var(--amber-500);
+    filter: drop-shadow(0 0 6px var(--amber-400));
+  }
+
+  .flow-particle-glow--feedback {
+    fill: var(--amber-400);
+    opacity: 0.4;
+  }
+
+  /* ── Left: Inputs ─────────────────────────────────────── */
+  .ri-hero__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .input-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: white;
+    border: 1.5px solid var(--blue-100);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    cursor: default;
+    opacity: 0;
+    transform: translateX(-30px);
+    animation: slideInLeft 0.6s ease forwards;
+  }
+
+  .input-card:nth-child(1) { animation-delay: 0.2s; }
+  .input-card:nth-child(2) { animation-delay: 0.3s; }
+  .input-card:nth-child(3) { animation-delay: 0.4s; }
+  .input-card:nth-child(4) { animation-delay: 0.5s; }
+  .input-card:nth-child(5) { animation-delay: 0.6s; }
+  .input-card:nth-child(6) { animation-delay: 0.7s; }
+
+  .input-card:hover {
+    border-color: var(--blue-400);
+    box-shadow: 0 4px 16px rgba(59,130,246,0.15);
+    transform: translateX(4px);
+  }
+
+  .input-card__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .input-card__icon--sortiment  { background: #ede9fe; color: var(--violet-500); }
+  .input-card__icon--pris       { background: #fef3c7; color: var(--amber-500); }
+  .input-card__icon--marknad    { background: #dbeafe; color: var(--blue-600); }
+  .input-card__icon--varumarke  { background: #ffe4e6; color: var(--rose-500); }
+  .input-card__icon--innehall   { background: #d1fae5; color: var(--emerald-500); }
+  .input-card__icon--kampanj    { background: #ffedd5; color: var(--orange-500); }
+
+  .input-card__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--slate-800);
+    line-height: 1.3;
+  }
+
+  .input-card__sub {
+    font-size: 11px;
+    color: var(--slate-400);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+
+  /* ── Center: Hub ──────────────────────────────────────── */
+  .ri-hero__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    position: relative;
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .hub {
+    position: relative;
+    width: 170px;
+    height: 170px;
+  }
+
+  .hub__outer-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid var(--blue-200);
+    opacity: 0;
+    animation: pulseRing 3s ease-in-out infinite;
+  }
+
+  .hub__outer-ring:nth-child(1) { inset: -20px; animation-delay: 0s; }
+  .hub__outer-ring:nth-child(2) { inset: -42px; animation-delay: 1s; }
+  .hub__outer-ring:nth-child(3) { inset: -64px; animation-delay: 2s; }
+
+  .hub__glow {
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+    animation: hubGlow 4s ease-in-out infinite alternate;
+  }
+
+  .hub__circle {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    box-shadow:
+      0 0 0 3px var(--blue-500),
+      0 0 30px rgba(59,130,246,0.3),
+      0 20px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: hubAppear 0.8s ease forwards 0.1s;
+  }
+
+  .hub__logo {
+    margin-bottom: 2px;
+    filter: drop-shadow(0 0 8px rgba(251,146,60,0.5));
+  }
+
+  .hub__product-name {
+    font-size: 14px;
+    color: white;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    margin-top: 4px;
+  }
+
+  .hub__product-sub {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--blue-400);
+    font-weight: 600;
+  }
+
+  .hub__status {
+    position: absolute;
+    bottom: -36px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--emerald-500);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .hub__status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--emerald-500);
+    animation: statusPulse 2s ease-in-out infinite;
+  }
+
+  /* ── Right: KPI Outputs ───────────────────────────────── */
+  .ri-hero__outputs {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .kpi-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: white;
+    border: 1.5px solid var(--slate-200);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    cursor: default;
+    opacity: 0;
+    transform: translateX(30px);
+    animation: slideInRight 0.6s ease forwards;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 14px 0 0 14px;
+  }
+
+  .kpi-card--rbi::before    { background: var(--blue-500); }
+  .kpi-card--cpi::before    { background: var(--violet-500); }
+  .kpi-card--svp::before    { background: var(--emerald-500); }
+  .kpi-card--price::before  { background: var(--amber-500); }
+  .kpi-card--stock::before  { background: var(--rose-500); }
+
+  .kpi-card:nth-child(1) { animation-delay: 0.4s; }
+  .kpi-card:nth-child(2) { animation-delay: 0.55s; }
+  .kpi-card:nth-child(3) { animation-delay: 0.7s; }
+  .kpi-card:nth-child(4) { animation-delay: 0.85s; }
+  .kpi-card:nth-child(5) { animation-delay: 1.0s; }
+
+  .kpi-card:hover {
+    border-color: var(--blue-300);
+    box-shadow: 0 6px 20px rgba(59,130,246,0.15);
+    transform: translateX(-4px);
+  }
+
+  .kpi-card__value-wrap {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .kpi-card--rbi .kpi-card__value-wrap   { background: var(--blue-50); }
+  .kpi-card--cpi .kpi-card__value-wrap   { background: #ede9fe; }
+  .kpi-card--svp .kpi-card__value-wrap   { background: #d1fae5; }
+  .kpi-card--price .kpi-card__value-wrap { background: #fef3c7; }
+  .kpi-card--stock .kpi-card__value-wrap { background: #ffe4e6; }
+
+  .kpi-card__value {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kpi-card--rbi .kpi-card__value   { color: var(--blue-600); }
+  .kpi-card--cpi .kpi-card__value   { color: var(--violet-500); }
+  .kpi-card--svp .kpi-card__value   { color: var(--emerald-500); }
+  .kpi-card--price .kpi-card__value { color: var(--amber-500); }
+  .kpi-card--stock .kpi-card__value { color: var(--rose-500); }
+
+  .kpi-card__unit {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--slate-400);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .kpi-card__info { min-width: 0; }
+
+  .kpi-card__label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--slate-800);
+    line-height: 1.2;
+  }
+
+  .kpi-card__desc {
+    font-size: 11px;
+    color: var(--slate-400);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+
+  .kpi-card__trend {
+    font-size: 10px;
+    font-weight: 700;
+    margin-top: 3px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .kpi-card__trend--up   { color: var(--emerald-500); background: #d1fae5; }
+  .kpi-card__trend--down { color: var(--rose-500); background: #ffe4e6; }
+
+  /* ── Animated value counter ───────────────────────────── */
+  .kpi-card__value[data-target] {
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  .kpi-card:nth-child(1) .kpi-card__value { animation-delay: 0.8s; }
+  .kpi-card:nth-child(2) .kpi-card__value { animation-delay: 0.95s; }
+  .kpi-card:nth-child(3) .kpi-card__value { animation-delay: 1.1s; }
+  .kpi-card:nth-child(4) .kpi-card__value { animation-delay: 1.25s; }
+  .kpi-card:nth-child(5) .kpi-card__value { animation-delay: 1.4s; }
+
+  /* ── Feedback loop banner ─────────────────────────────── */
+  .feedback-banner {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 0 0;
+    margin-top: 32px;
+    z-index: 4;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: feedbackBannerIn 0.8s ease forwards 2.5s;
+  }
+
+  .feedback-banner__pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border: 1.5px solid var(--amber-400);
+    border-radius: 100px;
+    box-shadow: 0 2px 12px rgba(245,158,11,0.15);
+  }
+
+  .feedback-banner__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--amber-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: rotateLoop 4s linear infinite;
+  }
+
+  .feedback-banner__text {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--slate-700);
+    line-height: 1.3;
+  }
+
+  .feedback-banner__sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--slate-500);
+  }
+
+  .feedback-banner__cycle {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    padding: 4px 12px;
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--amber-500);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .feedback-banner__cycle-num {
+    display: inline-block;
+    min-width: 14px;
+    text-align: center;
+  }
+
+  /* ── Arrowhead for feedback ───────────────────────────── */
+  .feedback-arrow {
+    fill: var(--amber-500);
+  }
+
+  /* ── Animations ───────────────────────────────────────── */
+  @keyframes slideInLeft {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes slideInRight {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @keyframes hubAppear {
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes pulseRing {
+    0%   { opacity: 0; transform: scale(0.8); }
+    50%  { opacity: 0.35; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.15); }
+  }
+
+  @keyframes hubGlow {
+    0%   { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.1); }
+  }
+
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
+    50%      { opacity: 0.7; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
+  }
+
+  @keyframes feedbackLineAppear {
+    to { opacity: 0.7; }
+  }
+
+  @keyframes feedbackDash {
+    to { stroke-dashoffset: -240; }
+  }
+
+  @keyframes feedbackBannerIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes rotateLoop {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── Responsive ───────────────────────────────────────── */
+  @media (max-width: 960px) {
+    .ri-hero__container {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto auto auto auto;
+      gap: 0;
+      max-width: 360px;
+    }
+    .col-label--input  { grid-column: 1; grid-row: 1; }
+    .ri-hero__inputs   { grid-column: 1; grid-row: 2; margin-bottom: 32px; }
+    .col-label--os     { grid-column: 1; grid-row: 3; }
+    .ri-hero__center   { grid-column: 1; grid-row: 4; margin-bottom: 48px; }
+    .col-label--output { grid-column: 1; grid-row: 5; }
+    .ri-hero__outputs  { grid-column: 1; grid-row: 6; }
+    .feedback-banner   { grid-column: 1; grid-row: 7; }
+    .ri-hero__svg { display: none; }
+    .input-card, .kpi-card {
+      opacity: 1; transform: none; animation: none;
+    }
+    .hub__circle { opacity: 1; transform: none; animation: none; }
+    .col-label { opacity: 1; animation: none; }
+    .kpi-card__value { opacity: 1 !important; animation: none !important; }
+    .feedback-banner { opacity: 1; transform: none; animation: none; }
+    .feedback-banner__pill { flex-wrap: wrap; justify-content: center; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<section class="ri-hero">
+  <div class="ri-hero__container">
+
+    <svg class="ri-hero__svg" id="flowSvg" preserveAspectRatio="none"></svg>
+
+    <!-- Column headers -->
+    <div class="col-label col-label--input">Dina insatser</div>
+    <div class="col-label col-label--os">Plattform</div>
+    <div class="col-label col-label--output">Dina resultat</div>
+
+    <!-- ═══ LEFT: Brand owner inputs ═══ -->
+    <div class="ri-hero__inputs" id="inputs">
+      <div class="input-card" data-input="0">
+        <div class="input-card__icon input-card__icon--sortiment">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </div>
+        <div>
+          <div class="input-card__label">Produktsortiment</div>
+          <div class="input-card__sub">SKU:er, kategorier, lanseringar</div>
+        </div>
+      </div>
+
+      <div class="input-card" data-input="1">
+        <div class="input-card__icon input-card__icon--pris">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <div class="input-card__label">Prissättning</div>
+          <div class="input-card__sub">RRP, kampanjpriser, marginal</div>
+        </div>
+      </div>
+
+      <div class="input-card" data-input="2">
+        <div class="input-card__icon input-card__icon--marknad">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        </div>
+        <div>
+          <div class="input-card__label">Marknadsaktiviteter</div>
+          <div class="input-card__sub">Media, influencers, SEM</div>
+        </div>
+      </div>
+
+      <div class="input-card" data-input="3">
+        <div class="input-card__icon input-card__icon--varumarke">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div>
+          <div class="input-card__label">Varumärke</div>
+          <div class="input-card__sub">Positionering & storytelling</div>
+        </div>
+      </div>
+
+      <div class="input-card" data-input="4">
+        <div class="input-card__icon input-card__icon--innehall">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div>
+          <div class="input-card__label">Produktinnehåll</div>
+          <div class="input-card__sub">PDP-texter, bilder, claims</div>
+        </div>
+      </div>
+
+      <div class="input-card" data-input="5">
+        <div class="input-card__icon input-card__icon--kampanj">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <div class="input-card__label">Kampanjer & Lanseringar</div>
+          <div class="input-card__sub">Timing, erbjudanden, push</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CENTER: Growth OS Hub ═══ -->
+    <div class="ri-hero__center">
+      <div class="hub" id="hub">
+        <div class="hub__outer-ring"></div>
+        <div class="hub__outer-ring"></div>
+        <div class="hub__outer-ring"></div>
+        <div class="hub__glow"></div>
+        <div class="hub__circle">
+          <div class="hub__logo">
+            <svg width="44" height="44" viewBox="0 0 100 100">
+              <defs>
+                <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#f97316"/>
+                  <stop offset="50%" style="stop-color:#ef4444"/>
+                  <stop offset="100%" style="stop-color:#f59e0b"/>
+                </linearGradient>
+              </defs>
+              <polygon points="50,10 20,45 35,85 65,85 80,45" fill="none" stroke="url(#brainGrad)" stroke-width="3"/>
+              <polygon points="50,10 35,45 50,75 65,45" fill="url(#brainGrad)" opacity="0.3"/>
+              <line x1="50" y1="10" x2="35" y2="45" stroke="url(#brainGrad)" stroke-width="2"/>
+              <line x1="50" y1="10" x2="65" y2="45" stroke="url(#brainGrad)" stroke-width="2"/>
+              <line x1="20" y1="45" x2="65" y2="45" stroke="url(#brainGrad)" stroke-width="1.5" opacity="0.6"/>
+              <line x1="35" y1="45" x2="35" y2="85" stroke="url(#brainGrad)" stroke-width="1.5" opacity="0.6"/>
+              <line x1="65" y1="45" x2="65" y2="85" stroke="url(#brainGrad)" stroke-width="1.5" opacity="0.6"/>
+              <line x1="50" y1="75" x2="20" y2="45" stroke="url(#brainGrad)" stroke-width="1" opacity="0.4"/>
+              <line x1="50" y1="75" x2="80" y2="45" stroke="url(#brainGrad)" stroke-width="1" opacity="0.4"/>
+              <circle cx="50" cy="10" r="3" fill="#f97316"/>
+              <circle cx="20" cy="45" r="3" fill="#ef4444"/>
+              <circle cx="80" cy="45" r="3" fill="#f59e0b"/>
+              <circle cx="35" cy="85" r="3" fill="#f97316"/>
+              <circle cx="65" cy="85" r="3" fill="#ef4444"/>
+              <circle cx="50" cy="75" r="2" fill="#f59e0b"/>
+            </svg>
+          </div>
+          <div class="hub__product-name">E-retail Growth OS</div>
+          <div class="hub__product-sub">intelligence</div>
+        </div>
+        <div class="hub__status">
+          <span class="hub__status-dot"></span>
+          Bevakar 5 kedjor live
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RIGHT: KPI Outputs ═══ -->
+    <div class="ri-hero__outputs" id="outputs">
+      <div class="kpi-card kpi-card--rbi" data-output="0">
+        <div class="kpi-card__value-wrap">
+          <div class="kpi-card__value" data-target="78" data-suffix="">0</div>
+          <div class="kpi-card__unit">/ 100</div>
+        </div>
+        <div class="kpi-card__info">
+          <div class="kpi-card__label">Retailer Business Index</div>
+          <div class="kpi-card__desc">Hälsopoäng per kedja</div>
+          <div class="kpi-card__trend kpi-card__trend--up">+6 vs förra veckan</div>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-card--cpi" data-output="1">
+        <div class="kpi-card__value-wrap">
+          <div class="kpi-card__value" data-target="0.92" data-suffix="" data-decimals="2">0</div>
+          <div class="kpi-card__unit">index</div>
+        </div>
+        <div class="kpi-card__info">
+          <div class="kpi-card__label">Prisposition</div>
+          <div class="kpi-card__desc">Ditt pris vs konkurrenter</div>
+          <div class="kpi-card__trend kpi-card__trend--up">Billigast i 3/5 kedjor</div>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-card--svp" data-output="2">
+        <div class="kpi-card__value-wrap">
+          <div class="kpi-card__value" data-target="4.2" data-suffix="" data-decimals="1">0</div>
+          <div class="kpi-card__unit">st/dag</div>
+        </div>
+        <div class="kpi-card__info">
+          <div class="kpi-card__label">Säljhastighet</div>
+          <div class="kpi-card__desc">Estimerad avyttring per dag</div>
+          <div class="kpi-card__trend kpi-card__trend--up">+18% acceleration</div>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-card--price" data-output="3">
+        <div class="kpi-card__value-wrap">
+          <div class="kpi-card__value" data-target="94" data-suffix="%">0</div>
+          <div class="kpi-card__unit">i lager</div>
+        </div>
+        <div class="kpi-card__info">
+          <div class="kpi-card__label">Lagertillgänglighet</div>
+          <div class="kpi-card__desc">Dina produkter i stock</div>
+          <div class="kpi-card__trend kpi-card__trend--down">2 OOS-varningar</div>
+        </div>
+      </div>
+
+      <div class="kpi-card kpi-card--stock" data-output="4">
+        <div class="kpi-card__value-wrap">
+          <div class="kpi-card__value" data-target="12" data-suffix="">0</div>
+          <div class="kpi-card__unit">aktiva</div>
+        </div>
+        <div class="kpi-card__info">
+          <div class="kpi-card__label">Möjligheter just nu</div>
+          <div class="kpi-card__desc">Konkurrent OOS / dyrare</div>
+          <div class="kpi-card__trend kpi-card__trend--up">Agera innan de fyller på</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BOTTOM: Feedback loop banner ═══ -->
+    <div class="feedback-banner">
+      <div class="feedback-banner__pill">
+        <div class="feedback-banner__icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>
+        </div>
+        <div>
+          <div class="feedback-banner__text">Resultat blir underlag, underlag blir bättre beslut</div>
+          <div class="feedback-banner__sub">Varje insikt skärper din nästa insats — en positiv loop som accelererar tillväxt</div>
+        </div>
+        <div class="feedback-banner__cycle">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m13 17 5-5-5-5"/><path d="m6 17 5-5-5-5"/></svg>
+          Cykel <span class="feedback-banner__cycle-num" id="cycleNum">1</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function() {
+  const svg = document.getElementById('flowSvg');
+  const container = document.querySelector('.ri-hero__container');
+  const inputEls = document.querySelectorAll('.input-card');
+  const hub = document.querySelector('.hub__circle');
+  const outputEls = document.querySelectorAll('.kpi-card');
+
+  const NS = 'http://www.w3.org/2000/svg';
+  let particles = [];
+  let animationId;
+
+  /* ── Helpers ──────────────────────────────────────────── */
+  function getCenter(el) {
+    const cr = el.getBoundingClientRect();
+    const pr = container.getBoundingClientRect();
+    return { x: cr.left - pr.left + cr.width / 2, y: cr.top - pr.top + cr.height / 2 };
+  }
+
+  function getRightEdge(el) {
+    const cr = el.getBoundingClientRect();
+    const pr = container.getBoundingClientRect();
+    return { x: cr.right - pr.left, y: cr.top - pr.top + cr.height / 2 };
+  }
+
+  function getLeftEdge(el) {
+    const cr = el.getBoundingClientRect();
+    const pr = container.getBoundingClientRect();
+    return { x: cr.left - pr.left, y: cr.top - pr.top + cr.height / 2 };
+  }
+
+  function getBottomCenter(el) {
+    const cr = el.getBoundingClientRect();
+    const pr = container.getBoundingClientRect();
+    return { x: cr.left - pr.left + cr.width / 2, y: cr.bottom - pr.top };
+  }
+
+  /* ── Build all SVG paths ──────────────────────────────── */
+  function buildPaths() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    particles = [];
+
+    const pr = container.getBoundingClientRect();
+    svg.setAttribute('viewBox', `0 0 ${pr.width} ${pr.height}`);
+
+    const hubC = getCenter(hub);
+
+    // ── Defs: filters + gradients ──
+    const defs = document.createElementNS(NS, 'defs');
+
+    ['glowBlue', 'glowGreen', 'glowAmber'].forEach(id => {
+      const filter = document.createElementNS(NS, 'filter');
+      filter.setAttribute('id', id);
+      const blur = document.createElementNS(NS, 'feGaussianBlur');
+      blur.setAttribute('stdDeviation', '3');
+      blur.setAttribute('result', 'blur');
+      const merge = document.createElementNS(NS, 'feMerge');
+      merge.innerHTML = '<feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/>';
+      filter.appendChild(blur);
+      filter.appendChild(merge);
+      defs.appendChild(filter);
+    });
+
+    // Feedback gradient: amber → orange
+    const fbGrad = document.createElementNS(NS, 'linearGradient');
+    fbGrad.setAttribute('id', 'feedbackGradient');
+    fbGrad.setAttribute('gradientUnits', 'userSpaceOnUse');
+    fbGrad.innerHTML = `
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="50%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    `;
+    defs.appendChild(fbGrad);
+
+    // Arrowhead marker
+    const marker = document.createElementNS(NS, 'marker');
+    marker.setAttribute('id', 'arrowAmber');
+    marker.setAttribute('markerWidth', '8');
+    marker.setAttribute('markerHeight', '6');
+    marker.setAttribute('refX', '8');
+    marker.setAttribute('refY', '3');
+    marker.setAttribute('orient', 'auto');
+    const arrowPath = document.createElementNS(NS, 'path');
+    arrowPath.setAttribute('d', 'M0,0 L8,3 L0,6 Z');
+    arrowPath.setAttribute('fill', '#f59e0b');
+    marker.appendChild(arrowPath);
+    defs.appendChild(marker);
+
+    svg.appendChild(defs);
+
+    // ── Input → Hub lines ──
+    inputEls.forEach((input, i) => {
+      const rc = getRightEdge(input);
+      const cpx1 = rc.x + (hubC.x - rc.x) * 0.45;
+      const cpx2 = hubC.x - (hubC.x - rc.x) * 0.15;
+      const d = `M ${rc.x} ${rc.y} C ${cpx1} ${rc.y}, ${cpx2} ${hubC.y}, ${hubC.x} ${hubC.y}`;
+
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', 'flow-line');
+      path.setAttribute('id', `leftPath${i}`);
+      svg.appendChild(path);
+
+      for (let p = 0; p < 2; p++) {
+        createParticle(`leftPath${i}`, i * 0.35 + p * 2.8, 3.5 + Math.random() * 1.5, 'blue');
+      }
+    });
+
+    // ── Hub → Output lines ──
+    outputEls.forEach((output, i) => {
+      const sc = getLeftEdge(output);
+      const cpx1 = hubC.x + (sc.x - hubC.x) * 0.15;
+      const cpx2 = sc.x - (sc.x - hubC.x) * 0.45;
+      const d = `M ${hubC.x} ${hubC.y} C ${cpx1} ${hubC.y}, ${cpx2} ${sc.y}, ${sc.x} ${sc.y}`;
+
+      const path = document.createElementNS(NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('class', 'flow-line');
+      path.setAttribute('id', `rightPath${i}`);
+      svg.appendChild(path);
+
+      for (let p = 0; p < 2; p++) {
+        createParticle(`rightPath${i}`, i * 0.3 + p * 2.5, 3 + Math.random() * 1.5, 'green');
+      }
+    });
+
+    // ── Feedback arc: Output bottom → under diagram → Input bottom ──
+    const lastOutput = outputEls[outputEls.length - 1];
+    const firstInput = inputEls[0];
+    const outBottom = getBottomCenter(lastOutput);
+    const inBottom = getBottomCenter(firstInput);
+
+    // Arc goes: from output bottom → swoops down → back to input bottom
+    const arcDrop = 100; // how far below the cards the arc dips
+    const midX = pr.width / 2;
+    const bottomY = Math.max(outBottom.y, inBottom.y) + arcDrop;
+
+    const feedbackD = `M ${outBottom.x} ${outBottom.y + 6} ` +
+      `C ${outBottom.x} ${bottomY}, ${midX + 80} ${bottomY + 10}, ${midX} ${bottomY} ` +
+      `C ${midX - 80} ${bottomY + 10}, ${inBottom.x} ${bottomY}, ${inBottom.x} ${inBottom.y + 6}`;
+
+    const feedbackPath = document.createElementNS(NS, 'path');
+    feedbackPath.setAttribute('d', feedbackD);
+    feedbackPath.setAttribute('class', 'flow-line flow-line--feedback');
+    feedbackPath.setAttribute('id', 'feedbackPath');
+    feedbackPath.setAttribute('marker-end', 'url(#arrowAmber)');
+    svg.appendChild(feedbackPath);
+
+    // Feedback particles
+    for (let p = 0; p < 4; p++) {
+      createParticle('feedbackPath', p * 2.2 + 1.5, 6 + Math.random(), 'amber');
+    }
+  }
+
+  function createParticle(pathId, delay, duration, color) {
+    const colorMap = {
+      blue:  { cls: 'flow-particle',           glowCls: 'flow-particle-glow',           filter: 'url(#glowBlue)' },
+      green: { cls: 'flow-particle--out',       glowCls: 'flow-particle-glow--out',       filter: 'url(#glowGreen)' },
+      amber: { cls: 'flow-particle--feedback',  glowCls: 'flow-particle-glow--feedback',  filter: 'url(#glowAmber)' }
+    };
+    const c = colorMap[color];
+
+    const glow = document.createElementNS(NS, 'circle');
+    glow.setAttribute('r', color === 'amber' ? '8' : '6');
+    glow.setAttribute('class', c.glowCls);
+    glow.setAttribute('filter', c.filter);
+    svg.appendChild(glow);
+
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('r', color === 'amber' ? '4' : '3');
+    dot.setAttribute('class', c.cls);
+    svg.appendChild(dot);
+
+    particles.push({ pathId, delay, duration, glow, dot, time: -delay });
+  }
+
+  /* ── Animation loop ───────────────────────────────────── */
+  function animate() {
+    const dt = 0.016;
+
+    particles.forEach(p => {
+      p.time += dt;
+      if (p.time < 0) {
+        p.dot.setAttribute('opacity', '0');
+        p.glow.setAttribute('opacity', '0');
+        return;
+      }
+
+      const progress = (p.time % p.duration) / p.duration;
+      const path = document.getElementById(p.pathId);
+      if (!path) return;
+
+      const len = path.getTotalLength();
+      const point = path.getPointAtLength(progress * len);
+
+      let opacity = 1;
+      if (progress < 0.1) opacity = progress / 0.1;
+      else if (progress > 0.9) opacity = (1 - progress) / 0.1;
+
+      p.dot.setAttribute('cx', point.x);
+      p.dot.setAttribute('cy', point.y);
+      p.dot.setAttribute('opacity', opacity);
+
+      p.glow.setAttribute('cx', point.x);
+      p.glow.setAttribute('cy', point.y);
+      p.glow.setAttribute('opacity', opacity * 0.4);
+    });
+
+    animationId = requestAnimationFrame(animate);
+  }
+
+  /* ── KPI counter animation ────────────────────────────── */
+  function animateCounters() {
+    document.querySelectorAll('.kpi-card__value[data-target]').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || '0');
+      const suffix = el.dataset.suffix || '';
+      const duration = 1200;
+      const start = performance.now();
+
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const current = target * ease;
+        el.textContent = current.toFixed(decimals) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+
+      const cardIndex = el.closest('.kpi-card').dataset.output;
+      setTimeout(() => requestAnimationFrame(tick), 800 + cardIndex * 150);
+    });
+  }
+
+  /* ── Cycle counter — ticks up every time a feedback particle completes a loop ── */
+  function startCycleCounter() {
+    const cycleEl = document.getElementById('cycleNum');
+    let cycle = 1;
+    setInterval(() => {
+      cycle++;
+      if (cycle > 99) cycle = 1;
+      cycleEl.textContent = cycle;
+      cycleEl.style.transform = 'scale(1.3)';
+      setTimeout(() => { cycleEl.style.transform = 'scale(1)'; }, 200);
+      cycleEl.style.transition = 'transform 0.2s ease';
+    }, 6500);
+  }
+
+  /* ── Hover highlights ─────────────────────────────────── */
+  inputEls.forEach((input, i) => {
+    input.addEventListener('mouseenter', () => {
+      const p = document.getElementById(`leftPath${i}`);
+      if (p) p.classList.add('flow-line--active');
+    });
+    input.addEventListener('mouseleave', () => {
+      const p = document.getElementById(`leftPath${i}`);
+      if (p) p.classList.remove('flow-line--active');
+    });
+  });
+
+  outputEls.forEach((output, i) => {
+    output.addEventListener('mouseenter', () => {
+      const p = document.getElementById(`rightPath${i}`);
+      if (p) p.classList.add('flow-line--active');
+    });
+    output.addEventListener('mouseleave', () => {
+      const p = document.getElementById(`rightPath${i}`);
+      if (p) p.classList.remove('flow-line--active');
+    });
+  });
+
+  /* ── Init ─────────────────────────────────────────────── */
+  function init() {
+    setTimeout(() => {
+      buildPaths();
+      animationId = requestAnimationFrame(animate);
+      animateCounters();
+      startCycleCounter();
+    }, 800);
+  }
+
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    cancelAnimationFrame(animationId);
+    resizeTimeout = setTimeout(() => {
+      buildPaths();
+      animationId = requestAnimationFrame(animate);
+    }, 200);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>
